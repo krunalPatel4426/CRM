@@ -14,6 +14,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Manage Sales Agents</h2>
         <div>
+            <button class="btn btn-success me-2" onclick="window.location.href='/admin/campaign-list'">List All Campaign</button>
+            <button class="btn btn-warning me-2" onclick="window.location.href='/admin/campaign-setup'">Setup Campaign</button>
             <button class="btn btn-success me-2" onclick="openAddAgentModal()">+ Add Sales Agent</button>
             <button class="btn btn-primary me-2" id="refreshAgentsBtn">Refresh Data</button>
             <button class="btn btn-danger" onclick="document.getElementById('logoutForm').submit();">Logout</button>

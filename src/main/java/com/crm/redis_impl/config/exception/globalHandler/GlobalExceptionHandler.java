@@ -1,5 +1,7 @@
 package com.crm.redis_impl.config.exception.globalHandler;
 
+import com.crm.redis_impl.config.exception.customException.InvalidArgumentException;
+import com.crm.redis_impl.config.exception.customException.NotFoundException;
 import com.crm.redis_impl.config.exception.customException.UnAuthorizedAccessxception;
 import com.crm.redis_impl.dto.response.ApiResponse;
 import org.slf4j.Logger;
@@ -27,6 +29,20 @@ public class GlobalExceptionHandler {
         logger.error(ex.getMessage(), ex);
         ApiResponse response = new ApiResponse("false", ex.getMessage(), null);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    public ResponseEntity<ApiResponse> handleExceptions(InvalidArgumentException ex) {
+        logger.error(ex.getMessage(), ex);
+        ApiResponse response = new ApiResponse("false", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiResponse> handleExceptions(NotFoundException ex) {
+        logger.error(ex.getMessage(), ex);
+        ApiResponse response = new ApiResponse("false", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
 }

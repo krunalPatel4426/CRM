@@ -29,13 +29,14 @@
                     <th>ID</th>
                     <th>Customer Name</th>
                     <th>Phone Number</th>
+                    <th>Lead Source</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody id="leadsTableBody">
                 <tr>
-                    <td colspan="5" class="text-center text-muted" id="loadingRow">Loading leads...</td>
+                    <td colspan="6" class="text-center text-muted" id="loadingRow">Loading leads...</td>
                 </tr>
                 </tbody>
             </table>

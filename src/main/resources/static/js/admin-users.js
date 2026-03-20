@@ -42,20 +42,25 @@ function populateAgentsTable(agentsData) {
     }
 
     $.each(agentsData, function(index, agent) {
+        // We add a class 'clickable-row' for styling, and an onclick to redirect.
         const row = `
-            <tr>
-                <td>${agent.id}</td>
-                <td class="fw-bold">${agent.username}</td>
-                <td>${agent.email}</td>
-                <td>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deactivateAgent(${agent.id})">Deactivate</button>
-                </td>
-            </tr>
-        `;
+        <tr class="clickable-row" style="cursor: pointer;" onclick="viewAgentLeads(${agent.id}, '${agent.username}')">
+            <td>${agent.id}</td>
+            <td class="fw-bold">${agent.username}</td>
+            <td>${agent.email}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger" onclick="deactivateAgent(event, ${agent.id})">Deactivate</button>
+            </td>
+        </tr>
+    `;
         $tableBody.append(row);
     });
-}
 
+}
+function viewAgentLeads(agentId, username) {
+    // Redirects to the new view controller page, passing the ID and Name
+    window.location.href = `/admin/agent/leads?id=${agentId}&name=${encodeURIComponent(username)}`;
+}
 function openAddAgentModal() {
     $('#agentUsername').val('');
     $('#agentEmail').val('');
@@ -107,6 +112,7 @@ $('#saveAgentBtn').on('click', function() {
 });
 
 function deactivateAgent(id) {
+    event.stopPropagation();
     Swal.fire({
         title: 'Are you sure?',
         text: "This will deactivate the sales agent and immediately prevent them from logging in.",

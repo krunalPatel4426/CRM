@@ -4,8 +4,10 @@
     import com.crm.redis_impl.dto.leadDto.LeadResponseDto;
     import com.crm.redis_impl.dto.response.ApiResponse;
     import com.crm.redis_impl.entity.lead.LeadEntity;
+    import com.crm.redis_impl.entity.leadSource.LeadSourceEntity;
     import com.crm.redis_impl.entity.user.UserEntity;
     import com.crm.redis_impl.repository.lead.LeadRepository;
+    import com.crm.redis_impl.repository.leadSource.LeadSourceRepository;
     import com.crm.redis_impl.repository.user.UserRepository;
     import com.crm.redis_impl.service.leadService.LeadService;
     import com.crm.redis_impl.service.redisService.RedisService;
@@ -20,6 +22,7 @@
     import org.springframework.stereotype.Service;
 
     import java.util.List;
+    import java.util.Optional;
     import java.util.stream.Collectors;
 
     @Service
@@ -39,6 +42,9 @@
 
         @Autowired
         private RedisService redisService;
+
+        @Autowired
+        private LeadSourceRepository  leadSourceRepository;
 
         @Override
         public ResponseEntity<ApiResponse> getLeadsForSalesperson(Long salespersonId) {
@@ -62,6 +68,11 @@
                 LeadResponseDto dto = new LeadResponseDto();
                 dto.setId(lead.getId());
                 dto.setCustomerName(lead.getCustomerName());
+                if(lead.getLeadSource() != null) {
+                    dto.setLeadSourceName(lead.getLeadSource().getLeadSourceName());
+                }else{
+                    dto.setLeadSourceName("Manual/Direct");
+                }
                 dto.setPhoneNumber(lead.getPhoneNumber());
                 dto.setCallStatus(lead.getCallStatus());
                 return dto;
@@ -75,11 +86,25 @@
         public ResponseEntity<ApiResponse> addLead(LeadRequestDto request, Long salespersonId) {
             UserEntity salesperson = userRepository.findById(salespersonId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
+            LeadSourceEntity leadSourceEntity;
+            Optional<LeadSourceEntity> optionalLeadSourceEntity;
+            if (request.getLeadSourceId() != null) {
+                 optionalLeadSourceEntity = leadSourceRepository.findById(request.getLeadSourceId());
+                if(!optionalLeadSourceEntity.isPresent()) {
+                    leadSourceEntity = null;
+                }else{
+                    leadSourceEntity = optionalLeadSourceEntity.get();
+                }
+            }else {
+                leadSourceEntity = null;
+            }
+
 
             LeadEntity newLead = new LeadEntity();
             newLead.setCustomerName(request.getCustomerName());
             newLead.setPhoneNumber(request.getPhoneNumber());
             newLead.setCallStatus(request.getCallStatus() != null ? request.getCallStatus() : "NEW");
+            newLead.setLeadSource(leadSourceEntity);
             newLead.setSalesperson(salesperson);
 
             leadRepository.save(newLead);

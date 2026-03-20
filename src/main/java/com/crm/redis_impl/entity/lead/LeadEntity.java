@@ -1,5 +1,6 @@
 package com.crm.redis_impl.entity.lead;
 
+import com.crm.redis_impl.entity.leadSource.LeadSourceEntity;
 import com.crm.redis_impl.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,8 @@ public class LeadEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salesperson_id", nullable = false)
     private UserEntity salesperson;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lead_source_id", nullable = true)
+    private LeadSourceEntity leadSource;
 }

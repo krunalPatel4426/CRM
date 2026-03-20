@@ -17,4 +17,36 @@ public class AdminViewController {
         modelAndView.setViewName("admin/manage-users"); // Maps to /WEB-INF/jsp/admin/manage-users.jsp
         return modelAndView;
     }
+
+    @GetMapping("/campaign-setup")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView manageCampaignsPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("campaign/campaignSetup");
+        return modelAndView;
+    }
+
+    @GetMapping("/campaign-list")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView manageCampaignsList() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("campaign/campaignList");
+        return modelAndView;
+    }
+
+    @GetMapping("/campaign-view")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView manageCampaignsView() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("campaign/campaignView");
+        return modelAndView;
+    }
+
+    @GetMapping("/agent/leads")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView manageLeadsForSpecificAgent() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/admin-agent-leads");
+        return modelAndView;
+    }
 }

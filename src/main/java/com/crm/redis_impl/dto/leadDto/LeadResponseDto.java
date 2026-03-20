@@ -14,4 +14,5 @@ public class LeadResponseDto implements Serializable {
     private String customerName;
     private String phoneNumber;
     private String callStatus;
+    private String leadSourceName;
 }

@@ -37,15 +37,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/free/**"))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers("/login",
                                 "/register",
+                                "/event-and-expo-avail-free-demo",
+                                "/api/free/**",
                                 "/api/v1/auth/register",
                                 "/css/**",
                                 "/js/**",
                                 "/error",
-                                "/favicon.ico").permitAll()
+                                "/favicon.ico"
+                                ).permitAll()
                         .requestMatchers("/admin/**", "/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

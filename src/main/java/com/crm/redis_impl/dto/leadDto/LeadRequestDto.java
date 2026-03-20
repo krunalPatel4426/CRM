@@ -7,4 +7,5 @@ public class LeadRequestDto {
     private String customerName;
     private String phoneNumber;
     private String callStatus; // e.g., "NEW"
+    private Long leadSourceId;
 }

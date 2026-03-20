@@ -2,6 +2,7 @@ package com.crm.redis_impl.controller.rest.adminController;
 
 import com.crm.redis_impl.dto.authDto.RegisterRequestDto;
 import com.crm.redis_impl.dto.response.ApiResponse;
+import com.crm.redis_impl.service.leadService.LeadService;
 import com.crm.redis_impl.service.userService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LeadService leadService;
 
     @GetMapping("/sales")
     @PreAuthorize("hasRole('ADMIN')")
@@ -32,5 +36,15 @@ public class AdminController {
     public ResponseEntity<ApiResponse> addSalesPerson(@RequestBody RegisterRequestDto request) {
         request.setRole("ROLE_SALES"); // Force the role for security
         return userService.registerNewUser(request);
+    }
+
+    @GetMapping("/sales-agents")
+    public ResponseEntity<ApiResponse> getAllSalesAgents() {
+        return userService.getAllSalesAgents();
+    }
+
+    @GetMapping("/{agentId}/leads")
+    public ResponseEntity<ApiResponse> getLeadsForSpecificAgent(@PathVariable Long agentId) {
+        return leadService.getLeadsForSalesperson(agentId);
     }
 }

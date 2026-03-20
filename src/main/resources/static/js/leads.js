@@ -15,6 +15,7 @@ function fetchLeadsAjax() {
         type: 'GET',
         contentType: 'application/json',
         success: function(apiResponse) {
+            console.log(apiResponse)
             if (apiResponse.success === "true") {
                 populateTable(apiResponse.data);
             } else {
@@ -24,6 +25,8 @@ function fetchLeadsAjax() {
         },
         error: function(xhr, status, error) {
             console.error("AJAX Error:", error);
+            console.error("AJAX status:", status);
+            console.error("AJAX xhr:", xhr);
             showError("A network error occurred or your session expired. Please try logging in again.");
             $tableBody.html('<tr><td colspan="5" class="text-center text-danger">Network error.</td></tr>');
         }
@@ -35,7 +38,7 @@ function populateTable(leadsData) {
     $tableBody.empty();
 
     if (!leadsData || leadsData.length === 0) {
-        $tableBody.html('<tr><td colspan="5" class="text-center text-muted">No leads assigned to you yet.</td></tr>');
+        $tableBody.html('<tr><td colspan="6" class="text-center text-muted">No leads assigned to you yet.</td></tr>');
         return;
     }
 
@@ -45,20 +48,23 @@ function populateTable(leadsData) {
         else if (lead.callStatus === 'DIALING') badgeClass = 'bg-warning text-dark';
         else if (lead.callStatus === 'COMPLETED') badgeClass = 'bg-success';
 
-        // FIXED: Only 5 <td> elements to match the 5 <th> elements!
+        // Style the Lead Source badge (Grey for manual, Info/Blue for campaigns)
+        let sourceBadgeClass = lead.leadSourceName === 'Manual/Direct' ? 'bg-secondary' : 'bg-info text-dark';
+
         const row = `
-            <tr>
-                <td>${lead.id}</td>
-                <td class="fw-bold">${lead.customerName}</td>
-                <td>${lead.phoneNumber}</td>
-                <td><span class="badge ${badgeClass}">${lead.callStatus}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-success me-1" onclick="initiateCall(${lead.id})">Call</button>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${lead.id}, '${lead.customerName}', '${lead.phoneNumber}', '${lead.callStatus}')">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLead(${lead.id})">Delete</button>
-                </td>
-            </tr>
-        `;
+        <tr>
+            <td>${lead.id}</td>
+            <td class="fw-bold">${lead.customerName}</td>
+            <td>${lead.phoneNumber}</td>
+            <td><span class="badge ${sourceBadgeClass}">${lead.leadSourceName}</span></td>
+            <td><span class="badge ${badgeClass}">${lead.callStatus}</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-success me-1" onclick="initiateCall(${lead.id})">Call</button>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${lead.id}, '${lead.customerName}', '${lead.phoneNumber}', '${lead.callStatus}')">Edit</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteLead(${lead.id})">Delete</button>
+            </td>
+        </tr>
+    `;
         $tableBody.append(row);
     });
 }
