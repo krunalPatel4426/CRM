@@ -22,7 +22,8 @@ public interface LeadRepository extends JpaRepository<LeadEntity, Long> {
             ls.lead_source_name as leadSourceName 
         FROM leads l 
         LEFT JOIN lead_source ls ON l.lead_source_id = ls.lead_source_id 
-        WHERE l.salesperson_id = :salespersonId 
+        LEFT JOIN users u on l.salesperson_id = u.id
+        WHERE l.salesperson_id = :salespersonId AND u.id = 0
         ORDER BY l.id DESC
         """, nativeQuery = true)
     List<LeadProjection> findLeadsWithSourceBySalespersonId(@Param("salespersonId") Long salespersonId);

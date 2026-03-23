@@ -111,7 +111,7 @@ $('#saveAgentBtn').on('click', function() {
     });
 });
 
-function deactivateAgent(id) {
+function deactivateAgent(event, id) {
     event.stopPropagation();
     Swal.fire({
         title: 'Are you sure?',

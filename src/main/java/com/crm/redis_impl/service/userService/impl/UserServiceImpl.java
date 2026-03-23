@@ -100,7 +100,11 @@ public class UserServiceImpl implements UserService {
         userRepository.deactivateUserNative(agentId);
 
         String agentUsername = agent.getUsername();
-        simpMessagingTemplate.convertAndSendToUser(agentUsername, "/queue/deactivation", "LOCKED");
+        try{
+            simpMessagingTemplate.convertAndSendToUser(agentUsername, "/queue/deactivation", "LOCKED");
+        }catch (Exception e){
+            log.error("Error sending deactivation message to queue");
+        }
         redisService.delete("ADMIN");
         return ResponseEntity.ok(new ApiResponse("true", "Agent successfully deactivated.", null));
     }

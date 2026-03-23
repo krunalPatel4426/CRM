@@ -1,4 +1,4 @@
-\<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +18,7 @@
         <h2>Campaign Management</h2>
         <div>
             <button class="btn btn-warning me-2" onclick="window.location.href='/admin/campaign-setup'">+ Setup New Campaign</button>
-            <button class="btn btn-danger" onclick="document.getElementById('logoutForm').submit();">Logout</button>
+<%--            <button class="btn btn-danger" onclick="document.getElementById('logoutForm').submit();">Logout</button>--%>
         </div>
     </div>
 

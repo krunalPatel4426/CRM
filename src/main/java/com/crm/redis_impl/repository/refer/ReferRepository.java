@@ -68,6 +68,7 @@ public interface ReferRepository extends JpaRepository<ReferEntity, Long> {
             ram.lead_source_id 
         FROM refers r 
             JOIN refer_agent_mappings ram ON r.refer_id = ram.refer_id AND ram.sales_person_id=:salesPersonId
+            JOIN users u on ram.sales_person_id = u.id AND u.is_deleted = 0
         WHERE r.utm_source=:utmSource AND r.utm_medium=:utmMedium AND r.utm_campaign=:utmCampaign;
 """)
     Long findLeadSourceId(String  utmSource,String utmMedium,String utmCampaign, Long salesPersonId);
